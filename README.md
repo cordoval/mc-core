@@ -1,18 +1,20 @@
-# Mission Control *(work in progress)*
+# Mission Control Core *(work in progress)*
 
-[![Build Status](https://travis-ci.org/space-race/mission-control.svg)](https://travis-ci.org/space-race/mission-control)
-[![Dependency Status](https://david-dm.org/space-race/mission-control.svg)](https://david-dm.org/space-race/mission-control)
-[![Dev Dependency Status](https://david-dm.org/space-race/mission-control/dev-status.svg)](https://david-dm.org/space-race/mission-control#info=devDependencies)
+This is the core repository for Mission Control.
+
+To start a new mission control project, see the [space-race/mission-control repo](https://github.com/space-race/mission-control).
+
+---
+
+[![Build Status](https://travis-ci.org/space-race/mc-core.svg)](https://travis-ci.org/space-race/mc-core)
+[![Dependency Status](https://david-dm.org/space-race/mc-core.svg)](https://david-dm.org/space-race/mc-core)
+[![Dev Dependency Status](https://david-dm.org/space-race/mc-core/dev-status.svg)](https://david-dm.org/space-race/mc-core#info=devDependencies)
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
+[![Downloads](https://img.shields.io/npm/dt/mc-core.svg)](https://www.npmjs.com/package/mc-core)
+[![Docs Link](https://img.shields.io/badge/style-spacerace.io-brightgreen.svg?style=flat&label=docs)](http://spacerace.io/mission-control/docs)
 [![Slack Status](https://space-race-slackin.herokuapp.com/badge.svg)](https://space-race-slackin.herokuapp.com/)
 
-Mission Control is a devops automation orchestration tool. It was built with the following common devops automation tasks in mind, but can be configured for just about anything.
 
-- [ ] Add devops tasks
-- [Getting Started](http://spacerace.io/mission-control/docs/getting-started.html)
-- [Contributing and Development](http://spacerace.io/mission-control/docs/development-overview.html) 
-
-[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/space-race/mission-control)
 
 ## Project Sponsors
 

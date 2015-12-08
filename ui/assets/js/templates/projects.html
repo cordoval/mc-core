@@ -1,0 +1,30 @@
+<section class="container-fluid">
+
+  <div class="row">
+    <div class="col-md-8">
+      <h1>Projects</h1>
+    </div>
+    <div class="col-md-4">
+      <a ng-click="modal.createProject(refresh)" class="pull-right btn btn-success">
+        <i class="fa fa-plus"></i> Create New Project
+      </a>
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="row">
+    <div class="col-md-4" ng-repeat="project in projects">
+      <div class="panel panel-default">
+        <div class="panel-heading"><i class="fa fa-code"></i> {{ project.name }}</div>
+        <div class="list-group">
+          <a href="#" class="list-group-item"><i class="fa fa-chevron-right pull-right"></i><i class="fa fa-tasks"></i> {{ 2 * $index + 1 }} pipelines</a>
+          <a href="#" class="list-group-item"><i class="fa fa-chevron-right pull-right"></i><i class="fa fa-heartbeat"></i> {{ 3 * $index }} checks</a>
+          <a href="#" class="list-group-item"><i class="fa fa-chevron-right pull-right"></i><i class="fa fa-file"></i> {{ 4 * $index + 1 }} files</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</section>

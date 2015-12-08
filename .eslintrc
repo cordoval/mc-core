@@ -1,6 +1,7 @@
 {
+  "root": true,
   "extends": "standard",
   "rules": {
-    "padded-blocks": [1, "always"]
+    "padded-blocks": 0
   }
 }
