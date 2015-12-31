@@ -19,6 +19,16 @@ module.exports = {
   },
 
   /**
+   * Get one project
+   *
+   * @param req
+   * @param res
+   */
+  getProject: (req, res) => {
+    basic.getOne(req, res, 'projects')
+  },
+
+  /**
    * Get projects with nested properties nested in each
    *
    * @param req
@@ -26,7 +36,7 @@ module.exports = {
    */
   getProjectsWithPipelines: (req, res) => {
 
-    let p1 = connection.select().from('pipelines')
+    let p1 = connection.select().from('pipeline_configs')
     let p2 = connection.select().orderBy('name', 'ASC').from('projects')
 
     Promise.all([p1, p2]).then((values) => {
@@ -46,7 +56,7 @@ module.exports = {
         projects[index].pipelines = pipelinesByProjectId[project.id] || []
       })
 
-      res.send({data:projects})
+      res.send({data: projects})
 
     }).catch(err => {
       logger.error(err)

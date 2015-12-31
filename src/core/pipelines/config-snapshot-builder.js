@@ -10,13 +10,14 @@ let logger = require('tracer').colorConsole()
  * - initial variable values
  * - stages
  * - stage configuration values
+ * - pipeline variables configuration
  *
  * Ultimately, this is used to execute a pipeline and its stages.
  *
  * @param {int|string} pipelineId
  * @param {function} callback
  */
-module.exports = function(pipelineId, callback) {
+module.exports = function snapshot(pipelineId, callback) {
 
   let snapshot = {}
   let promises = []
@@ -24,9 +25,11 @@ module.exports = function(pipelineId, callback) {
   // Load pipeline
   promises.push(new Promise((resolve, reject) => {
 
-    connection.first().where('id', pipelineId).from('pipelines').then((pipeline) => {
+    connection.first().where('id', pipelineId).from('pipeline_configs').then((pipeline) => {
+
       snapshot.pipeline = pipeline
       resolve()
+
     }).catch(err => {
       logger.error(err)
       reject()
@@ -37,9 +40,11 @@ module.exports = function(pipelineId, callback) {
   // Load stages
   promises.push(new Promise((resolve, reject) => {
 
-    connection.select().where('pipeline_id', pipelineId).from('pipeline_stages').then((rows) => {
-      snapshot.stages = rows
+    connection.select().where('pipeline_config_id', pipelineId).orderBy('sort').from('pipeline_stage_configs').then((rows) => {
+
+      snapshot.stageConfigs = rows
       resolve()
+
     }).catch(err => {
       logger.error(err)
       reject()
@@ -47,12 +52,20 @@ module.exports = function(pipelineId, callback) {
 
   }))
 
+  // Load variables
+  promises.push(new Promise((resolve, reject) => {
 
-  // inject initial variables value
+    connection.select().where('pipeline_config_id', pipelineId).from('pipeline_variables').then((rows) => {
 
-  // TODO: inject stages (with config)
+      snapshot.variables = rows
+      resolve()
 
-  Promise.all(promises).then(() => {
-    callback(snapshot)
-  })
+    }).catch(err => {
+      logger.error(err)
+      reject()
+    })
+
+  }))
+
+  return Promise.all(promises).then(() => callback(snapshot))
 }

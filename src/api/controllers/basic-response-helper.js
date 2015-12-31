@@ -2,6 +2,7 @@
 
 let connection = require('../../db/connection')
 let logger = require('tracer').colorConsole()
+let parseParams = require('./util/parse-params')
 
 module.exports = {
 
@@ -19,6 +20,26 @@ module.exports = {
       logger.error(err)
       res.status(500).send({message: 'An error occurred.'})
     })
+  },
+
+  /**
+   * Get a single item
+   *
+   * @param req
+   * @param res
+   * @param table
+   */
+  getOne: (req, res, table) => {
+    connection.first()
+      .where('id', req.params.id)
+      .from(table)
+      .then((item) => {
+        res.send({data: item})
+      })
+      .catch(err => {
+        logger.error(err)
+        res.status(500).send({message: 'An error occurred.'})
+      })
   },
 
   /**
@@ -43,6 +64,69 @@ module.exports = {
       logger.error(err)
       res.status(500).send({message: 'An error occurred.'})
     })
+  },
+
+  /**
+   * Patch a (single) record in a table
+   *
+   * @param req
+   * @param res
+   * @param table
+   */
+  patchRespond: (req, res, table) => {
+
+    let changes = req.body
+
+    // Don't allow ID to be changed
+    if (typeof changes.id !== 'undefined') {
+      delete changes.id
+    }
+
+    if (req.params.id) {
+      connection
+        .table(table)
+        .where('id', req.params.id)
+        .update(parseParams(changes))
+        .then(item => {
+          logger.log(item)
+          res.status(200).send({message: 'Updated: ' + req.params.id})
+        })
+        .catch(err => {
+          logger.error(err)
+          res.status(500)
+        })
+    } else {
+      res.status(400).send({message: 'No ID specified.'})
+    }
+  },
+
+  /**
+   * Delete's ID from post body in specified table
+   * @param  {Object} req   Express request
+   * @param  {Object} res   Express response
+   * @param  {String} table Name of table to delete record from
+   * @return {Object}       Response body
+   */
+  deleteRespond: (req, res, table) => {
+    if (req.params.id) {
+      connection
+        .table(table)
+        .where('id', req.params.id)
+        .del()
+        .then(item => {
+          if (item) {
+            res.status(200).send({message: 'Deleted: ' + req.params.id})
+          } else {
+            res.status(404).send({message: 'No record for: ' + req.params.id})
+          }
+        })
+        .catch(err => {
+          logger.error(err)
+          res.status(500)
+        })
+    } else {
+      res.status(400).send({message: 'No ID specified.'})
+    }
   },
 
   /**

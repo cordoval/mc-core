@@ -7,16 +7,16 @@ let connection = require('../../db/connection')
 
 module.exports = {
 
-  getUser: function (req, res) {
+  getUser: function(req, res) {
 
     connection.table('users')
       .first()
       .where('id', req.user.id)
-      .then(function (user) {
+      .then(function(user) {
 
         delete user.password
         res.send({data: user})
-      }).catch(function (err) {
+      }).catch(function(err) {
 
         logger.error(err)
 
@@ -29,7 +29,12 @@ module.exports = {
 
   },
 
-  login: function (req, res) {
+  login: function(req, res) {
+
+    // must have a secret key set
+    if (!process.env.SECRET_KEY) {
+      logger.error('Missing SECRET_KEY from your env')
+    }
 
     // validate request
     if (!req.body.email || !req.body.password) {
@@ -46,7 +51,7 @@ module.exports = {
       .table('users')
       .first('id', 'email', 'password')
       .where('email', req.body.email)
-      .then(function (user) {
+      .then(function(user) {
 
         // Test hash. If successful, respond with JWT
         bcrypt.compare(req.body.password, user.password, (err, hash) => {
@@ -74,18 +79,18 @@ module.exports = {
 
         })
 
-    }).catch(function (err) {
+      }).catch(function(err) {
 
-      logger.error(err)
-      res.status(401).send({
-        message: 'Incorrect email or password.'
+        logger.error(err)
+        res.status(401).send({
+          message: 'Incorrect email or password.'
+        })
+
       })
-
-    })
 
   },
 
-  logout: function (req, res) {
+  logout: function(req, res) {
 
     res.clearCookie('mc_jwt').send({
       message: 'Successfully logged out.'
